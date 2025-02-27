@@ -1,4 +1,5 @@
 name: guilds
 version: '1.0-SNAPSHOT'
 main: it.acctudio.guilds.Guilds
+depend: [WorldGuard]
 api-version: '1.21'
