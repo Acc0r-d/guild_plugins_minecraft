@@ -1,0 +1,4 @@
+name: guilds
+version: '1.0-SNAPSHOT'
+main: it.acctudio.guilds.Guilds
+api-version: '1.21'
