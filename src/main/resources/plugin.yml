@@ -1,5 +1,6 @@
 name: guilds
 version: '1.0-SNAPSHOT'
-main: it.acctudio.guilds.Guilds
-depend: [WorldGuard]
+main: it.acctudio.guildscuboid.Guilds
+depend: [WorldGuard , Parties]
+softdepend: [Citizens , Parties]
 api-version: '1.21'
