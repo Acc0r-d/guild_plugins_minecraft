@@ -19,22 +19,24 @@ public class GuildCuboidManager {
     private final GuildDB store;
     private Guilds plugin;
 
+    public World guildWorld;
     public GuildCuboidManager(Guilds plugin) {
         this.plugin = plugin;
         store = new GuildDB(this, plugin);
+        guildWorld = plugin.getServer().getWorld("world");
     }
-    public void createCuboid(UUID partiesUUID, Location location , World eventWorld) {
+    public void createCuboid(UUID partiesUUID, Location location) {
         GuildCuboid guild = new GuildCuboid(partiesUUID);
-        createRegion(location , guild.region ,  eventWorld);
+        createRegion(location , guild.region ,  guildWorld);
         guild.npcID = createGuildMaster(location);
 
         guilds.add(guild);
         store.Save(guild);
         //leader.sendMessage("Utworzono gildię: " + name + "! Użyj różdżki, aby wybrać centrum regionu.");
     }
-    public void destroyCuboid(UUID partiesUUID, World eventWorld) {
+    public void destroyCuboid(UUID partiesUUID) {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regions = container.get(BukkitAdapter.adapt(eventWorld));
+        RegionManager regions = container.get(BukkitAdapter.adapt(guildWorld));
         Optional<GuildCuboid> guild = guilds.stream().filter(r -> r.parties.equals(partiesUUID)).findFirst();
         if (!guild.isPresent()) {
             return;

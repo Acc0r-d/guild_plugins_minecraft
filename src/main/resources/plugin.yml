@@ -4,3 +4,7 @@ main: it.acctudio.guildscuboid.Guilds
 depend: [WorldGuard , Parties]
 softdepend: [Citizens , Parties]
 api-version: '1.21'
+commands:
+  guild:
+    description: Itemki
+    usage: /guild [args]

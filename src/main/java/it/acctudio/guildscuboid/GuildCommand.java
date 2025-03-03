@@ -1,6 +1,7 @@
 package it.acctudio.guildscuboid;
 
-import it.acctudio.guildscuboid.Items.FlagItem;
+
+import it.acctudio.guildscuboid.Items.UtilityItems;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,8 +19,8 @@ public class GuildCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if(!sender.isOp()) return false;
-        if (args[0].equalsIgnoreCase("wand")) {
-            ItemStack wand = new FlagItem(plugin);
+        if (args[0].equalsIgnoreCase("flag")) {
+            ItemStack wand = UtilityItems.FlagItem();
             Player player = (Player) sender;
             player.getInventory().addItem(wand);
             player.sendMessage("Otrzymałeś flagę! Lewy klik, aby ustawić centrum regionu 200x200.");

@@ -1,11 +1,13 @@
 package it.acctudio.guildscuboid;
 
 import it.acctudio.guildscuboid.NPC.NPCInteraction;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.units.qual.N;
 
 public final class Guilds extends JavaPlugin {
     private GuildCuboidManager guildCuboidManager;
+
     @Override
     public void onEnable() {
         getLogger().info("[Plugin Gildii] Włączony!");
@@ -28,8 +30,9 @@ public final class Guilds extends JavaPlugin {
             return;
         }
         // Inicjalizacja managera gildii
-        guildCuboidManager = new GuildCuboidManager(this);
 
+        guildCuboidManager = new GuildCuboidManager(this);
+        getCommand("guild").setExecutor(new GuildCommand(this));
         // Rejestracja listenerów
         getServer().getPluginManager().registerEvents(new GuildListener(this), this);
         getServer().getPluginManager().registerEvents(new NPCInteraction(this),this);

@@ -1,6 +1,7 @@
 package it.acctudio.guildscuboid;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,7 @@ public class GuildDB {
     private final File configFile;
     private final GuildCuboidManager guildCuboidManager;
     private final Guilds plugin;
+    private YamlConfiguration config;
 
     public GuildDB(GuildCuboidManager manager, Guilds plugin) {
         this.guildCuboidManager = manager;
@@ -22,7 +24,6 @@ public class GuildDB {
 
     public void Save(GuildCuboid guild) {
         try {
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
             String uuidKey = guild.parties.toString();
 
             // Zapisz dane w strukturze UUID -> region, npc
@@ -32,39 +33,51 @@ public class GuildDB {
             config.save(configFile);
             plugin.getLogger().info("Zapisano gildię: " + uuidKey);
         } catch (IOException e) {
+            plugin.getLogger().severe("Nie udało się zapisać gildii " + guild.parties + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
-    public void Remove(GuildCuboid guild) {
+
+    public void remove(GuildCuboid guild) {
         try {
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
             String uuidKey = guild.parties.toString();
-            // Zapisz dane w strukturze UUID -> region, npc
-            config.set(uuidKey, null);
+            config.set(uuidKey, null); // Usuń sekcję dla danej gildii
             config.save(configFile);
-            plugin.getLogger().info("Zapisano gildię: " + uuidKey);
+            plugin.getLogger().info("Usunięto gildię: " + uuidKey);
         } catch (IOException e) {
+            plugin.getLogger().severe("Nie udało się usunąć gildii " + guild.parties + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void loadInit() {
         try {
-            if (!configFile.exists()) {
-                configFile.createNewFile();
+            // Utwórz folder nadrzędny, jeśli nie istnieje
+            File dataFolder = plugin.getDataFolder();
+            if (!dataFolder.exists()) {
+                if (!dataFolder.mkdirs()) {
+                    plugin.getLogger().severe("Nie udało się utworzyć folderu pluginu!");
+                    return; // Nie rzucamy wyjątku, aby plugin mógł kontynuować działanie
+                }
             }
 
-            List<GuildCuboid> guilds = new ArrayList<>();
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+            // Utwórz plik guilds.yml, jeśli nie istnieje
+            if (!configFile.exists()) {
+                configFile.createNewFile();
+                plugin.getLogger().info("Utworzono nowy plik guilds.yml.");
+            }
 
-            // Wczytaj wszystkie UUID jako główne klucze
+            // Wczytaj konfigurację
+            config = YamlConfiguration.loadConfiguration(configFile);
+
+            List<GuildCuboid> guilds = new ArrayList<>();
             for (String uuidKey : config.getKeys(false)) {
                 try {
                     UUID parties = UUID.fromString(uuidKey);
-
                     String region = config.getString(uuidKey + ".region");
-                    GuildCuboid guild = new GuildCuboid(region , parties);
-                    int npc = config.getInt(uuidKey + ".npc");
+                    int npc = config.getInt(uuidKey + ".npc", -1); // Domyślna wartość -1, jeśli brak NPC
+
+                    GuildCuboid guild = new GuildCuboid(region, parties);
                     guild.npcID = npc;
                     guilds.add(guild);
                 } catch (IllegalArgumentException e) {
@@ -73,7 +86,15 @@ public class GuildDB {
             }
             guildCuboidManager.loadGuilds(guilds);
         } catch (IOException e) {
-            throw new RuntimeException("Błąd podczas inicjalizacji guilds.yml", e);
+            plugin.getLogger().severe("Błąd podczas inicjalizacji guilds.yml: " + e.getMessage());
+            e.printStackTrace();
+            // Nie rzucamy RuntimeException, aby plugin mógł działać dalej
         }
+    }
+
+    // Metoda do ręcznego przeładowania konfiguracji (opcjonalna)
+    public void reload() {
+        config = YamlConfiguration.loadConfiguration(configFile);
+        loadInit();
     }
 }
