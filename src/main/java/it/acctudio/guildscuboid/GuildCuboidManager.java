@@ -30,10 +30,10 @@ public class GuildCuboidManager {
         store = new GuildDB(this, plugin);
         guildWorld = plugin.getServer().getWorld("world");
     }
-    public void createCuboid(UUID partiesUUID, Location location) {
+    public void createCuboid(UUID partiesUUID, Location location ,World world) {
         GuildCuboid guild = new GuildCuboid(partiesUUID);
-
-        createRegion(location , guild.region ,  guildWorld , partiesUUID);
+        guildWorld = world;
+        createRegion(location , guild.region , guildWorld , partiesUUID);
         guild.npcID = createGuildMaster(location);
 
         guilds.add(guild);

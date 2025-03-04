@@ -35,10 +35,7 @@ public class GuildListener implements Listener {
 
         if (item.getType() != Material.STICK || !item.hasItemMeta()) return;
         ItemMeta meta = item.getItemMeta();
-        if(meta == null) return;
-        RtagItem NBT = new RtagItem(item);
-
-        if (NBT.get("plugin_tag") != "guild_addon" || NBT.get("guild_plugin") != "guild_flag" ) return;
+        if (meta == null || !meta.hasCustomModelData() || meta.getCustomModelData() != 10) return;
 
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
@@ -48,21 +45,23 @@ public class GuildListener implements Listener {
             player.sendMessage("Nie jesteś w gildii");
             return;
         }
-        if(player.getWorld() == plugin.getGuildManager().guildWorld) {
+        //todo zmiana z różdzki na tabliczke
+        //todo dodawanie ludzi którzy już są w gildi
+        /*if(player.getWorld() == plugin.getGuildManager().guildWorld) {
             player.sendMessage("Nie jesteś w odpowiednim świecie");
             return;
-        }
+        }*/
         Party party = partiesAPI.getPartyOfPlayer(uuid);
 
         player.sendMessage("Lider gildii: " + party.getLeader().toString());
         player.sendMessage("Twoje UUID: " + uuid.toString());
-
+        player.sendMessage("Świat: " + player.getWorld());
         if (!party.getLeader().equals(uuid)) {
             player.sendMessage("Nie jesteś liderem gildii");
             return;
         }
 
-        plugin.getGuildManager().createCuboid(party.getId(), player.getLocation());
+        plugin.getGuildManager().createCuboid(party.getId(), player.getLocation() , player.getWorld());
         player.sendMessage("Założono teren gildii " + party.getName());
     }
     @EventHandler
