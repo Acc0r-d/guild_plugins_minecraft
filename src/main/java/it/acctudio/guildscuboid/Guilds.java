@@ -5,13 +5,13 @@ import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.units.qual.N;
 
+import javax.swing.text.html.parser.Entity;
+
 public final class Guilds extends JavaPlugin {
     private GuildCuboidManager guildCuboidManager;
 
     @Override
     public void onEnable() {
-        getLogger().info("[Plugin Gildii] Włączony!");
-
         // Sprawdzanie WorldGuarda
         if (getServer().getPluginManager().getPlugin("WorldGuard") == null) {
             getLogger().severe("WorldGuard nie znaleziony! OFF");
@@ -34,8 +34,10 @@ public final class Guilds extends JavaPlugin {
         guildCuboidManager = new GuildCuboidManager(this);
         getCommand("guild").setExecutor(new GuildCommand(this));
         // Rejestracja listenerów
+
         getServer().getPluginManager().registerEvents(new GuildListener(this), this);
         getServer().getPluginManager().registerEvents(new NPCInteraction(this),this);
+        getLogger().info("Włączony!");
     }
     @Override
     public void onDisable() {

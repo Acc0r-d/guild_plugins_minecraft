@@ -1,5 +1,6 @@
 package it.acctudio.guildscuboid.Items;
 
+import com.saicone.rtag.RtagItem;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import it.acctudio.guildscuboid.Guilds;
 import org.bukkit.Material;
@@ -23,7 +24,10 @@ public class UtilityItems {
         meta.setDisplayName("Guild Flag");
         meta.setCustomModelData(10);
         item.setItemMeta(meta);
-
+        RtagItem NBT = new RtagItem(item);
+        NBT.set("guild_addon" , "plugin_tag");
+        NBT.set("guild_flag" , "guild_plugin");
+        NBT.update();
         return item;
     }
 

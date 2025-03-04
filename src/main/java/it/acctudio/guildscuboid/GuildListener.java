@@ -1,9 +1,15 @@
 package it.acctudio.guildscuboid;
 
 import com.alessiodp.parties.api.Parties;
+import com.alessiodp.parties.api.enums.JoinCause;
 import com.alessiodp.parties.api.events.bukkit.party.BukkitPartiesPartyPostDeleteEvent;
+import com.alessiodp.parties.api.events.bukkit.player.BukkitPartiesPlayerPostJoinEvent;
+import com.alessiodp.parties.api.events.bukkit.player.BukkitPartiesPlayerPostLeaveEvent;
+import com.alessiodp.parties.api.events.bukkit.player.BukkitPartiesPlayerPreJoinEvent;
 import com.alessiodp.parties.api.interfaces.PartiesAPI;
 import com.alessiodp.parties.api.interfaces.Party;
+import com.alessiodp.parties.api.interfaces.PartyPlayer;
+import com.saicone.rtag.RtagItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,7 +35,10 @@ public class GuildListener implements Listener {
 
         if (item.getType() != Material.STICK || !item.hasItemMeta()) return;
         ItemMeta meta = item.getItemMeta();
-        if (meta == null || !meta.hasCustomModelData() || meta.getCustomModelData() != 10) return;
+        if(meta == null) return;
+        RtagItem NBT = new RtagItem(item);
+
+        if (NBT.get("plugin_tag") != "guild_addon" || NBT.get("guild_plugin") != "guild_flag" ) return;
 
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
@@ -43,9 +52,6 @@ public class GuildListener implements Listener {
             player.sendMessage("Nie jesteś w odpowiednim świecie");
             return;
         }
-
-
-        player.sendMessage("Jesteś w gildii: tak");
         Party party = partiesAPI.getPartyOfPlayer(uuid);
 
         player.sendMessage("Lider gildii: " + party.getLeader().toString());
@@ -57,14 +63,22 @@ public class GuildListener implements Listener {
         }
 
         plugin.getGuildManager().createCuboid(party.getId(), player.getLocation());
-        player.sendMessage("Założono teren gildii");
+        player.sendMessage("Założono teren gildii " + party.getName());
     }
     @EventHandler
     public void onGuildRemove(BukkitPartiesPartyPostDeleteEvent event) {
         Party party = event.getParty();
         plugin.getGuildManager().destroyCuboid(party.getId());
+    }
 
+    @EventHandler
+    public void onJoinToGuild(BukkitPartiesPlayerPostJoinEvent event){
+        plugin.getGuildManager().addToRegion(event.getPartyPlayer().getPlayerUUID() , event.getParty().getId());
+    }
 
+    @EventHandler
+    public void onLeaveToGuild(BukkitPartiesPlayerPostLeaveEvent event){
+        plugin.getGuildManager().removeFromRegion(event.getPartyPlayer().getPlayerUUID() , event.getParty().getId());
     }
 
 }

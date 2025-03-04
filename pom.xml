@@ -68,6 +68,10 @@
             <url>https://maven.citizensnpcs.co/repo</url>
         </repository>
         <repository>
+            <id>Jitpack</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>alessiodp-repo</id>
             <url>https://repo.alessiodp.com/releases/</url>
         </repository>
@@ -93,6 +97,31 @@
             <version>3.2.16</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.saicone.rtag</groupId>
+            <artifactId>rtag</artifactId>
+            <version>1.5.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.36</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.saicone.rtag</groupId>
+            <artifactId>rtag-block</artifactId>
+            <version>1.5.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.saicone.rtag</groupId>
+            <artifactId>rtag-item</artifactId>
+            <version>1.5.9</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens-main</artifactId>
