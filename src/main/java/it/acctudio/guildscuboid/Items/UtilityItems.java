@@ -1,7 +1,6 @@
 package it.acctudio.guildscuboid.Items;
 
 import com.saicone.rtag.RtagItem;
-import io.papermc.paper.datacomponent.item.ItemLore;
 import it.acctudio.guildscuboid.Guilds;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

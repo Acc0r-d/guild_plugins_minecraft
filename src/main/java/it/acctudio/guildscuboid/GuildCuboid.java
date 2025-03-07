@@ -14,13 +14,7 @@ import java.util.stream.Collectors;
 public class GuildCuboid {
     public  String region;
     public final UUID parties;
-    public int npcID ;
-    public GuildCuboid(UUID partiesUUID) {
-        PartiesAPI partiesAPI = Parties.getApi();
-        this.parties = partiesUUID;
-        this.region = "guild_" + partiesAPI.getParty(partiesUUID).getName();
-        
-    }
+
     public GuildCuboid(String region ,UUID partiesUUID) {
         PartiesAPI partiesAPI = Parties.getApi();
         this.parties = partiesUUID;
