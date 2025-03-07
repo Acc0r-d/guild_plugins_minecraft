@@ -2,11 +2,7 @@ package it.acctudio.guildscuboid;
 
 
 import it.acctudio.guildscuboid.command.CommandManager;
-import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.checkerframework.checker.units.qual.N;
-
-import javax.swing.text.html.parser.Entity;
 
 public final class Guilds extends JavaPlugin {
     private GuildCuboidManager guildCuboidManager;
@@ -34,11 +30,13 @@ public final class Guilds extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GuildListener(this), this);
         getLogger().info("Włączony!");
     }
+
     @Override
     public void onDisable() {
         // Plugin shutdown logic
     }
-    public GuildCuboidManager getGuildManager(){
+
+    public GuildCuboidManager getGuildManager() {
         return guildCuboidManager;
     }
 }

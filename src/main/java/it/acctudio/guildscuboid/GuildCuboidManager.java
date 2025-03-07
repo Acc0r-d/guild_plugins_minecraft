@@ -26,8 +26,8 @@ public class GuildCuboidManager {
     private static final int GUILD_SIZE = 200; // Stały rozmiar 200x200
     private final List<GuildCuboid> guilds = new ArrayList<>();
     private final GuildDB store;
-    public World guildWorld;
     private final Guilds plugin;
+    public World guildWorld;
 
     public GuildCuboidManager(Guilds plugin) {
         this.plugin = plugin;

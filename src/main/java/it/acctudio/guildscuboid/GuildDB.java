@@ -1,7 +1,6 @@
 package it.acctudio.guildscuboid;
 
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +26,7 @@ public class GuildDB {
             String uuidKey = guild.parties.toString();
 
             // Zapisz dane w strukturze UUID -> region, npc
-            config.set(uuidKey , guild.region);
+            config.set(uuidKey, guild.region);
 
             config.save(configFile);
             plugin.getLogger().info("Zapisano gildię: " + uuidKey);
