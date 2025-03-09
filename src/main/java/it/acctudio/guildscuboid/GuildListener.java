@@ -53,7 +53,7 @@ public class GuildListener implements Listener {
 
         Player player = event.getPlayer();
         Action action = event.getAction();
-        player.sendMessage(event.getClickedBlock().getType().name());
+
         if (action != Action.RIGHT_CLICK_BLOCK) return;
 
         Block block = event.getClickedBlock();
