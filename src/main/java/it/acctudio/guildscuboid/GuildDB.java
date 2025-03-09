@@ -1,7 +1,6 @@
 package it.acctudio.guildscuboid;
 
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +26,7 @@ public class GuildDB {
             String uuidKey = guild.parties.toString();
 
             // Zapisz dane w strukturze UUID -> region, npc
-            config.set(uuidKey + ".region", guild.region);
-            config.set(uuidKey + ".npc", guild.npcID);
+            config.set(uuidKey, guild.region);
 
             config.save(configFile);
             plugin.getLogger().info("Zapisano gildię: " + uuidKey);
@@ -74,11 +72,10 @@ public class GuildDB {
             for (String uuidKey : config.getKeys(false)) {
                 try {
                     UUID parties = UUID.fromString(uuidKey);
-                    String region = config.getString(uuidKey + ".region");
-                    int npc = config.getInt(uuidKey + ".npc", -1); // Domyślna wartość -1, jeśli brak NPC
+                    String region = config.getString(uuidKey);
 
                     GuildCuboid guild = new GuildCuboid(region, parties);
-                    guild.npcID = npc;
+
                     guilds.add(guild);
                 } catch (IllegalArgumentException e) {
                     plugin.getLogger().warning("Nieprawidłowy UUID w guilds.yml: " + uuidKey);
