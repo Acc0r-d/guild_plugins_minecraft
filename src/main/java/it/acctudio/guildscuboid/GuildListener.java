@@ -39,13 +39,13 @@ public class GuildListener implements Listener {
             event.getBlock().breakNaturally();
             player.sendMessage("§cNie masz permisji, aby postawić tabliczkę [Guild]!");
         }
-        event.setLine(1, ChatColor.DARK_GRAY + "[Guild]");
-        plugin.getGuildManager()
+        event.setLine(0, ChatColor.BLUE + "[Guild]");
+        String region = plugin.getGuildManager()
                 .getCuboidByLocation(
                         event.getBlock().getLocation(),
                         event.getBlock().getWorld()
                 );
-
+        event.setLine(1, region);
     }
 
     @EventHandler
@@ -53,11 +53,10 @@ public class GuildListener implements Listener {
 
         Player player = event.getPlayer();
         Action action = event.getAction();
-
-        if (action != Action.LEFT_CLICK_BLOCK || action != Action.RIGHT_CLICK_BLOCK) return;
+        player.sendMessage(event.getClickedBlock().getType().name());
+        if (action != Action.RIGHT_CLICK_BLOCK) return;
 
         Block block = event.getClickedBlock();
-
         if (block == null) return;
 
         if (!isSign(block.getType())) return;
@@ -66,8 +65,9 @@ public class GuildListener implements Listener {
         String[] lines = sign.getLines();
 
         if (lines.length < 1) return;
-        if (!lines[0].equals("[Guild]")) return;
-        if (!lines[1].equals(null)) return;
+        if (!lines[0].equals(ChatColor.BLUE + "[Guild]")) return;
+        event.setCancelled(true);
+        if (lines[1] == null || lines[1].isEmpty()) return;
         UUID uuid = player.getUniqueId();
         PartiesAPI partiesAPI = Parties.getApi();
         if (!partiesAPI.isPlayerInParty(uuid)) {
@@ -80,7 +80,8 @@ public class GuildListener implements Listener {
             return;
         }
 
-        String guildRegion = lines[2];
+        String guildRegion = lines[1];
+
         plugin.getGuildManager().createCuboid(party.getId(), guildRegion);
         player.sendMessage("Zajęto teren dla gildii " + party.getName());
         Component msg = Component.text()
@@ -89,6 +90,7 @@ public class GuildListener implements Listener {
                 .append(Component.text(" zajmuje region!", NamedTextColor.GOLD))
                 .build();
         plugin.getServer().broadcast(msg);
+        block.breakNaturally();
     }
 
     @EventHandler

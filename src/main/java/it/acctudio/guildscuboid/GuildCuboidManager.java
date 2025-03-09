@@ -70,6 +70,12 @@ public class GuildCuboidManager {
             return null;
         }
     }
+    public boolean checkAllowThisRegion(World world , String region){
+
+
+
+        return true;
+    }
 
     public GuildCuboid assignCuboid(UUID partiesUUID, String region) {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
